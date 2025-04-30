@@ -44,3 +44,7 @@ Este projeto gera uma **planilha com recomendações de produtos similares**, co
 2. **Execute o script Python:**
    ```bash
    python nome_do_script.py
+Deseja gerar uma planilha para um GrupoPai específico? (s/n): s
+Digite os códigos dos GrupoPai separados por vírgula (ex: 550000,700000): 550000
+
+Desenvolvido por JEAN ALEX DA SILVA.
