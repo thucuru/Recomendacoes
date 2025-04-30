@@ -1,75 +1,46 @@
-Apresentação do Código de Recomendação de Produtos
-Objetivo
-Este código lê uma tabela de produtos (CSV) e gera uma planilha Excel com sugestões de produtos similares, com base em critérios como:
+# 🛍️ Sistema de Recomendação de Produtos
 
-Tamanho do produto
+Este projeto gera uma **planilha com recomendações de produtos similares**, com base em um arquivo CSV contendo produtos. As recomendações consideram o nome do produto, o tamanho (quando aplicável), a marca e o grupo ao qual o item pertence.
 
-Texto do nome do produto
+---
 
-Grupo e marca
+## 📁 Estrutura do Projeto
 
-O que o código faz?
-Lê um arquivo CSV com os produtos
+- **Entrada:** Arquivo `seu_cadastro.csv` contendo os produtos
+- **Saída:** Arquivo `recomendacoes.xlsx` com os produtos recomendados
 
-Limpa e normaliza os nomes dos produtos
+---
 
-Extrai o tamanho do nome do produto (como 12", 300mm, etc.)
+## 📌 Funcionalidades
 
-Compara os produtos entre si para encontrar os mais parecidos
+- **Normalização de texto:** remove acentos, palavras comuns e deixa o nome em minúsculas.
+- **Extração de tamanho:** detecta medidas como polegadas, mm e cm a partir do nome.
+- **Cálculo de similaridade:** usa TF-IDF + cosseno e distância de Levenshtein.
+- **Filtros por grupo e marca:** garante que as recomendações sejam do mesmo grupo e, preferencialmente, da mesma marca.
+- **Geração de Excel:** cria uma planilha organizada com as recomendações por GrupoPai e Grupo.
 
-Gera uma planilha Excel com as recomendações
+---
 
-Como o nome do produto é tratado?
-Exemplo de nome original:
-"Faca de Corte 12""
+## 🧠 Lógica de Recomendação
 
-Passos:
+### 🔸 GrupoPai = `550000`
+- Recomendação baseada apenas no **tamanho do produto**.
+- Ordena os produtos com **tamanho mais próximo**.
 
-Remove acentos: "Faca de Corte 12"
+### 🔸 Outros GrupoPai
+- Calcula a **similaridade textual** entre os nomes dos produtos.
+- Usa:
+  - **TF-IDF + similaridade de cosseno**
+  - **Distância de Levenshtein**
+- Prioriza produtos do **mesmo grupo** e da **mesma marca**.
 
-Coloca tudo em minúsculo: "faca de corte 12"
+---
 
-Remove palavras como "de", "com", "para": "faca corte 12"
+## 📝 Como Usar
 
-Como o tamanho é extraído?
-Ele procura números no nome com unidades como:
+1. **Prepare o arquivo `seu_cadastro.csv`** com as colunas obrigatórias:
+   - `SKU`, `Nome`, `Marca`, `Grupo`, `GrupoPai`, `Venda`
 
-Polegadas ("12", 12 pol, 12 p)
-
-Milímetros ou centímetros (300 mm, 30 cm)
-
-Exemplo: "Faca Corte 12\"" → tamanho = 12
-
-Como ele decide os produtos mais parecidos?
-Depende do tipo de produto (GrupoPai):
-
-Se for do GrupoPai 550000:
-Usa apenas a diferença de tamanho.
-
-Recomenda os produtos com tamanho mais próximo.
-
-Para os outros grupos:
-Compara o nome com outros produtos usando dois métodos:
-
-Similaridade de palavras (TF-IDF e cosseno)
-
-Distância entre letras (Levenshtein)
-
-Prioriza os da mesma marca, depois os de outras marcas, desde que estejam no mesmo grupo.
-
-Como funciona a geração da planilha?
-O código pergunta se você quer gerar uma planilha para algum GrupoPai.
-
-Para cada produto, ele cria uma lista de até 5 produtos recomendados.
-
-Gera um arquivo Excel com:
-
-Uma aba chamada "BaseProdutos" com todos os produtos
-
-Abas separadas para cada grupo com os resultados
-
-As colunas mostram:
-
-Produto base: SKU, nome e valor
-
-Produto recomendado: SKU, nome (usando fórmula do Excel), valor (também fórmula)
+2. **Execute o script Python:**
+   ```bash
+   python nome_do_script.py
